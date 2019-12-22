@@ -12,10 +12,10 @@ public class Driving : MonoBehaviour
     #region speed/Rigidbodies
     private Rigidbody rb;
     private Vector3 m_EulerAngleVelocity;
-    private int speed;
-    private int maxSpeed;
+    [SerializeField] private int speed;
+    [SerializeField] private int maxSpeed;
     private float generalTurnSpeed;
-    private int turnSpeed;
+    [SerializeField] private int turnSpeed;
     #endregion
 
     private void Awake()
@@ -26,32 +26,35 @@ public class Driving : MonoBehaviour
 
     private void Start()
     {
-        turnSpeed = 20;
-        speed = 20;
-        maxSpeed = 45;
+        turnSpeed = 60;
+        speed = 200;
+        maxSpeed = 2100;
     }
 
     void FixedUpdate()
     {
-      
+        #region move left & right
         if (Input.GetKey(KeyCode.A))
         {
-            m_EulerAngleVelocity = new Vector3(0, 25, 0);
-            print(m_EulerAngleVelocity);
+            m_EulerAngleVelocity = new Vector3(0, -turnSpeed, 0);
 
             Quaternion deltaRotation = Quaternion.Euler(m_EulerAngleVelocity * Time.deltaTime);
             rb.MoveRotation(rb.rotation * deltaRotation);
+            print(deltaRotation);
         }
         if (Input.GetKey(KeyCode.D))
         {
-            m_EulerAngleVelocity = new Vector3(0, -25, 0);
-            print(m_EulerAngleVelocity);
+            m_EulerAngleVelocity = new Vector3(0, turnSpeed, 0);
 
             Quaternion deltaRotation = Quaternion.Euler(m_EulerAngleVelocity * Time.deltaTime);
             rb.MoveRotation(rb.rotation * deltaRotation);
+            print(deltaRotation);
         }
+        #endregion
 
         tmpro.text = rb.velocity.magnitude.ToString();
+
+        #region move forward & backward
         if (Input.GetKey(KeyCode.W))
         {
             rb.AddForce(new Vector3(transform.forward.x, 0, transform.forward.z) * speed);
@@ -64,5 +67,6 @@ public class Driving : MonoBehaviour
         {
             rb.AddForce(new Vector3(transform.forward.x, 0, transform.forward.z) * -speed);
         }
+        #endregion
     }
 }
