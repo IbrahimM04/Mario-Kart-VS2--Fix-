@@ -14,7 +14,10 @@ public class Driving : MonoBehaviour
     private Vector3 rotationDirection;
     [SerializeField] private int speed;
     [SerializeField] private int maxSpeed;
+    [SerializeField] private int maxSpeedReverse;
+    [SerializeField] private int boostSpeed;
     [SerializeField] private int turnSpeed;
+    private bool isBoosted;
     #endregion
 
     //defining unity variables such as finding components of gameobjects
@@ -30,6 +33,8 @@ public class Driving : MonoBehaviour
         turnSpeed = 60;
         speed = 200;
         maxSpeed = 2100;
+        isBoosted = false;
+        maxSpeedReverse = -75;
     }
 
     //working with FixedUpdate due to physics
@@ -63,14 +68,18 @@ public class Driving : MonoBehaviour
             rb.AddForce(new Vector3(transform.forward.x, 0, transform.forward.z) * speed);
 
             //limits the speed of the kart
-            if(rb.velocity.magnitude >= maxSpeed)
+            if (rb.velocity.magnitude >= maxSpeed && isBoosted == false)
+            {
+                rb.velocity *= 0.95f;
+            }
+            else if (isBoosted && rb.velocity.magnitude >= boostSpeed)
             {
                 rb.velocity *= 0.99f;
             }
         }
         if (Input.GetKey(KeyCode.S))
         {
-            rb.AddForce(new Vector3(transform.forward.x, 0, transform.forward.z) * -speed);
+            rb.AddForce(new Vector3(transform.forward.x, 0, transform.forward.z) * maxSpeedReverse);
         }
         #endregion
     }
