@@ -10,6 +10,8 @@ public class Driving : MonoBehaviour
     #endregion
 
     #region Speed/Rigidbodies variables
+    private float wheelRotaionSpeed;
+    private float rotationX;
     private Rigidbody rb;
     private Vector3 rotationDirection;
     [SerializeField] private int speed;
@@ -18,6 +20,8 @@ public class Driving : MonoBehaviour
     [SerializeField] private int boostSpeed;
     [SerializeField] private int turnSpeed;
     private bool isBoosted;
+    [SerializeField] private GameObject[] frontWheels;
+    private GameObject[] backWheels;
     #endregion
 
     //defining unity variables such as finding components of gameobjects
@@ -65,6 +69,9 @@ public class Driving : MonoBehaviour
         #region move forward & backward
         if (Input.GetKey(KeyCode.W))
         {
+            frontWheels[0].transform.Rotate(0, wheelRotaionSpeed, 0);
+            wheelRotaionSpeed += 0.2f;
+
             rb.AddForce(new Vector3(transform.forward.x, 0, transform.forward.z) * speed);
 
             //limits the speed of the kart
@@ -74,7 +81,7 @@ public class Driving : MonoBehaviour
             }
             else if (isBoosted && rb.velocity.magnitude >= boostSpeed)
             {
-                rb.velocity *= 0.99f;
+                rb.velocity *= 0.95f;
             }
         }
         if (Input.GetKey(KeyCode.S))
