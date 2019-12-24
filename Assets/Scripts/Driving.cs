@@ -10,7 +10,7 @@ public class Driving : MonoBehaviour
     #endregion
 
     #region Speed/Rigidbodies variables
-    private float wheelRotaionSpeed;
+    private float wheelRotationSpeed;
     private float rotationX;
     private Rigidbody rb;
     private Vector3 rotationDirection;
@@ -21,7 +21,11 @@ public class Driving : MonoBehaviour
     [SerializeField] private int turnSpeed;
     private bool isBoosted;
     [SerializeField] private GameObject[] frontWheels;
-    private GameObject[] backWheels;
+    [SerializeField] private Transform backWheels;
+    #endregion
+
+    #region garbage variables
+    private bool firstTime;
     #endregion
 
     //defining unity variables such as finding components of gameobjects
@@ -29,6 +33,7 @@ public class Driving : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
         tmpro = GameObject.Find("SpeedText").GetComponent<TextMeshProUGUI>();
+        backWheels = GameObject.Find("backWheels").GetComponentInChildren<Transform>();
     }
 
     //defining variables
@@ -39,6 +44,7 @@ public class Driving : MonoBehaviour
         maxSpeed = 2100;
         isBoosted = false;
         maxSpeedReverse = -75;
+        firstTime = true;
     }
 
     //working with FixedUpdate due to physics
@@ -69,8 +75,14 @@ public class Driving : MonoBehaviour
         #region move forward & backward
         if (Input.GetKey(KeyCode.W))
         {
-            frontWheels[0].transform.Rotate(0, wheelRotaionSpeed, 0);
-            wheelRotaionSpeed += 0.2f;
+            if (firstTime)
+            {
+                wheelRotationSpeed = 50;
+                firstTime = false;
+            }
+            frontWheels[0].transform.Rotate(0, wheelRotationSpeed, 0);
+            backWheels.transform.Rotate(0, wheelRotationSpeed, 0);
+            wheelRotationSpeed += 0.08f;
 
             rb.AddForce(new Vector3(transform.forward.x, 0, transform.forward.z) * speed);
 
@@ -83,10 +95,26 @@ public class Driving : MonoBehaviour
             {
                 rb.velocity *= 0.95f;
             }
+            if (Input.GetKeyUp(KeyCode.W))
+            {
+                firstTime = true;
+            }
         }
-        if (Input.GetKey(KeyCode.S))
+        else if (Input.GetKey(KeyCode.S))
         {
+            if (firstTime)
+            {
+                wheelRotationSpeed = -50;
+                firstTime = false;
+            }
             rb.AddForce(new Vector3(transform.forward.x, 0, transform.forward.z) * maxSpeedReverse);
+            frontWheels[0].transform.Rotate(0, wheelRotationSpeed, 0);
+            backWheels.transform.Rotate(0, wheelRotationSpeed, 0);
+            wheelRotationSpeed -= 0.08f;
+            if (Input.GetKeyUp(KeyCode.S))
+            {
+                firstTime = true;
+            }
         }
         #endregion
     }
