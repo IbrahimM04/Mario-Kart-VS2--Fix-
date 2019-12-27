@@ -24,6 +24,10 @@ public class Driving : MonoBehaviour
     [SerializeField] private Transform backWheels;
     #endregion
 
+    #region drifting variables
+    private int driftDirection;
+    #endregion
+
     //defining unity variables such as finding components of gameobjects
     private void Awake()
     {
@@ -46,14 +50,18 @@ public class Driving : MonoBehaviour
     //working with FixedUpdate due to physics
     void FixedUpdate()
     {
-        #region move left & right
+        //driving();
+        drifting();
+    }
+
+    private void driving()
+    {
         if (Input.GetKey(KeyCode.A))
         {
             rotationDirection = new Vector3(0, -turnSpeed, 0);
 
             Quaternion deltaRotation = Quaternion.Euler(rotationDirection * Time.deltaTime);
             rb.MoveRotation(rb.rotation * deltaRotation);
-            print(deltaRotation);
         }
         if (Input.GetKey(KeyCode.D))
         {
@@ -63,12 +71,10 @@ public class Driving : MonoBehaviour
             rb.MoveRotation(rb.rotation * deltaRotation);
             print(deltaRotation);
         }
-        #endregion
 
         //Dis shit for debugging only
         tmpro.text = rb.velocity.magnitude.ToString();
-
-        #region move forward & backward
+        
         if (Input.GetKey(KeyCode.W))
         {
             frontWheels[0].transform.Rotate(0, +wheelRotationSpeed, 0);
@@ -89,9 +95,61 @@ public class Driving : MonoBehaviour
         else if (Input.GetKey(KeyCode.S))
         {
             rb.AddForce(new Vector3(transform.forward.x, 0, transform.forward.z) * maxSpeedReverse);
-            frontWheels[0].transform.Rotate(0, -wheelRotationSpeed, 0);
-            backWheels.transform.Rotate(0, -wheelRotationSpeed, 0);
+            frontWheels[0].transform.Rotate(0, -wheelRotationSpeed / 3, 0);
+            backWheels.transform.Rotate(0, -wheelRotationSpeed / 3, 0);
         }
-        #endregion
+    }
+
+    private void drifting()
+    {
+        if (Input.GetKeyDown(KeyCode.LeftShift) && Input.GetKeyDown(KeyCode.A))
+        {
+            driftDirection = 0;
+            StartCoroutine(turningDrifting(driftDirection));
+        }
+        if (Input.GetKeyDown(KeyCode.LeftShift) && Input.GetKeyDown(KeyCode.A))
+        {
+            driftDirection = 1;
+            StartCoroutine(turningDrifting(driftDirection));
+        }
+    }
+
+    private IEnumerator turningDrifting(int direction)
+    {
+        switch (direction)
+        {
+            case 1:
+                for (int i = 0; i < 30; i++)
+                {
+                    rotationDirection = new Vector3(0, -turnSpeed, 0);
+
+                    yield return new WaitForSeconds(0.00001f);
+
+                    Quaternion deltaRotation = Quaternion.Euler(rotationDirection * Time.deltaTime);
+                    rb.MoveRotation(rb.rotation * deltaRotation);
+                }
+                break;
+            case 2:
+                for (int i = 0; i < 100; i++)
+                {
+                    rotationDirection = new Vector3(0, turnSpeed, 0);
+
+                    yield return new WaitForSeconds(0.00001f);
+
+                    Quaternion deltaRotation = Quaternion.Euler(rotationDirection * Time.deltaTime);
+                    rb.MoveRotation(rb.rotation * deltaRotation);
+                }
+                break;
+
+        }
+        
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.tag == "ram")
+        {
+            //ram shitz
+        }
     }
 }
