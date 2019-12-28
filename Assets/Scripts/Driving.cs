@@ -42,7 +42,7 @@ public class Driving : MonoBehaviour
     {
         canDrift = true;
         wheelRotationSpeed = 7;
-        turnSpeed = 90;
+        turnSpeed = 70;
         speed = 1200;
         maxSpeed = 2100;
         isBoosted = false;
@@ -109,7 +109,7 @@ public class Driving : MonoBehaviour
             driftDirection = 0;
             StartCoroutine(turningDrifting(driftDirection, false));
         }
-        if (Input.GetKeyDown(KeyCode.LeftShift) && Input.GetKeyDown(KeyCode.A) && canDrift)
+        if (Input.GetKey(KeyCode.LeftShift) && Input.GetKey(KeyCode.D) && canDrift)
         {
             driftDirection = 1;
             StartCoroutine(turningDrifting(driftDirection, false));
@@ -122,8 +122,8 @@ public class Driving : MonoBehaviour
         switch (direction)
         {
             case 0:
-                rb.AddForce(new Vector3(0, 10, 0) * 100);
-                for (int i = 0; i < 30; i++)
+                rb.AddForce(new Vector3(0, 10000, 0));
+                for (int i = 0; i < 25; i++)
                 {
                     rotationDirection = new Vector3(0, -turnSpeed, 0);
 
@@ -136,13 +136,13 @@ public class Driving : MonoBehaviour
                 break;
             case 1:
                 rb.AddForce(new Vector3(0, 10, 0) * 100);
-                for (int i = 0; i < 30; i++)
+                for (int i = 0; i < 25; i++)
                 {
-                    rotationDirection = new Vector3(0, -turnSpeed, 0);
+                    rotationDirection = new Vector3(0, turnSpeed, 0);
 
                     yield return new WaitForSeconds(0.00001f);
 
-                    Quaternion deltaRotation = Quaternion.Euler(-rotationDirection * Time.deltaTime);
+                    Quaternion deltaRotation = Quaternion.Euler(rotationDirection * Time.deltaTime);
                     rb.MoveRotation(rb.rotation * deltaRotation);
                 }
                 canDrift = true;
