@@ -9,6 +9,10 @@ public class Driving : MonoBehaviour
     private TextMeshProUGUI tmpro;
     #endregion
 
+    #region Visual variaibles
+    private ParticleSystem[] boostFlames;
+    #endregion
+
     #region Speed/Rigidbodies variables
     private float wheelRotationSpeed;
     private float rotationX;
@@ -27,6 +31,7 @@ public class Driving : MonoBehaviour
     #region drifting variables
     private int driftDirection;
     private bool canDrift;
+    private bool canDriveDrift;
     #endregion
 
     //defining unity variables such as finding components of gameobjects
@@ -52,8 +57,23 @@ public class Driving : MonoBehaviour
     //working with FixedUpdate due to physics
     void FixedUpdate()
     {
+        //Dis shit for debugging only
+        tmpro.text = rb.velocity.magnitude.ToString();
+
         driving();
-        drifting();
+        if (canDrift)
+        {
+            if (Input.GetKey(KeyCode.LeftShift) && Input.GetKey(KeyCode.A))
+            {
+                driftDirection = 0;
+                drift(driftDirection);
+            }
+            else if (Input.GetKey(KeyCode.LeftShift) && Input.GetKey(KeyCode.D))
+            {
+                driftDirection = 1;
+                drift(driftDirection);
+            }
+        }
     }
 
     private void driving()
@@ -74,8 +94,6 @@ public class Driving : MonoBehaviour
             print(deltaRotation);
         }
 
-        //Dis shit for debugging only
-        tmpro.text = rb.velocity.magnitude.ToString();
 
         if (Input.GetKey(KeyCode.W))
         {
@@ -102,28 +120,13 @@ public class Driving : MonoBehaviour
         }
     }
 
-    private void drifting()
+    private IEnumerator turningDrifting(int direction)
     {
-        if (Input.GetKey(KeyCode.LeftShift) && Input.GetKey(KeyCode.A) && canDrift)
-        {
-            driftDirection = 0;
-            StartCoroutine(turningDrifting(driftDirection, false));
-        }
-        if (Input.GetKey(KeyCode.LeftShift) && Input.GetKey(KeyCode.D) && canDrift)
-        {
-            driftDirection = 1;
-            StartCoroutine(turningDrifting(driftDirection, false));
-        }
-    }
-
-    private IEnumerator turningDrifting(int direction, bool drift)
-    {
-        canDrift = drift;
         switch (direction)
         {
             case 0:
-                rb.AddForce(new Vector3(0, 10000, 0));
-                for (int i = 0; i < 25; i++)
+                rb.AddForce(new Vector3(0, 100, 0), ForceMode.Impulse);
+                for (int i = 0; i < 15; i++)
                 {
                     rotationDirection = new Vector3(0, -turnSpeed, 0);
 
@@ -132,11 +135,20 @@ public class Driving : MonoBehaviour
                     Quaternion deltaRotation = Quaternion.Euler(rotationDirection * Time.deltaTime);
                     rb.MoveRotation(rb.rotation * deltaRotation);
                 }
-                canDrift = true;
+                rb.AddForce(new Vector3(0, -100, 0), ForceMode.Impulse);
+                for (int i = 0; i < 15; i++)
+                {
+                    rotationDirection = new Vector3(0, -turnSpeed, 0);
+
+                    yield return new WaitForSeconds(0.00001f);
+
+                    Quaternion deltaRotation = Quaternion.Euler(rotationDirection * Time.deltaTime);
+                    rb.MoveRotation(rb.rotation * deltaRotation);
+                }
                 break;
             case 1:
-                rb.AddForce(new Vector3(0, 10, 0) * 100);
-                for (int i = 0; i < 25; i++)
+                rb.AddForce(new Vector3(0, 100, 0), ForceMode.Impulse);
+                for (int i = 0; i < 15; i++)
                 {
                     rotationDirection = new Vector3(0, turnSpeed, 0);
 
@@ -145,10 +157,34 @@ public class Driving : MonoBehaviour
                     Quaternion deltaRotation = Quaternion.Euler(rotationDirection * Time.deltaTime);
                     rb.MoveRotation(rb.rotation * deltaRotation);
                 }
-                canDrift = true;
+                rb.AddForce(new Vector3(0, -100, 0), ForceMode.Impulse);
+                for (int i = 0; i < 15; i++)
+                {
+                    rotationDirection = new Vector3(0, -turnSpeed, 0);
+
+                    yield return new WaitForSeconds(0.00001f);
+
+                    Quaternion deltaRotation = Quaternion.Euler(rotationDirection * Time.deltaTime);
+                    rb.MoveRotation(rb.rotation * deltaRotation);
+                }
                 break;
         }
+    }
 
+    private void drift(int direction)
+    {
+        switch (direction)
+        {
+            case 0:
+
+
+                break;
+
+            case 1:
+
+
+                break;
+        }
     }
 
     private void OnCollisionEnter(Collision collision)
