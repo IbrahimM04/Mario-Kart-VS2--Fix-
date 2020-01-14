@@ -7,6 +7,8 @@ public class Driving : MonoBehaviour
 {
     #region Debugging variables
     private TextMeshProUGUI tmpro;
+    public int yeet;
+    public int kek;
     #endregion
 
     #region Visual variaibles
@@ -69,13 +71,18 @@ public class Driving : MonoBehaviour
         }
         else if (isDrifting)
         {
-            drifting();
+            drifting(driftDirection);
         }
-        if (Input.GetKey(KeyCode.LeftShift) && Input.GetKey(KeyCode.D))
+
+        if (Input.GetKeyDown(KeyCode.LeftShift))
         {
+            driftDirection = 0;
             isDrifting = true;
         }
-        
+        if (Input.GetKeyUp(KeyCode.LeftShift))
+        {
+            isDrifting = false;
+        }
     }
 
     private void driving()
@@ -123,9 +130,18 @@ public class Driving : MonoBehaviour
     }
 
     //fucntion for drifting
-    private void drifting()
+    private void drifting(int driftDir)
     {
-
+        switch (driftDir)
+        {
+            case 0:
+                rb.AddForce(new Vector3(transform.forward.x + yeet, 0, transform.forward.z + kek) * speed / 10f);
+                break;
+            case 1:
+                rb.AddForce(new Vector3(transform.forward.x + 1, 0, transform.forward.z + 1) * speed / 2.1f);
+                break;
+        }
+        
     }
     
     private void OnCollisionEnter(Collision collision)
