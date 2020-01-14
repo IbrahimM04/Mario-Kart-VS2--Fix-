@@ -26,11 +26,12 @@ public class Driving : MonoBehaviour
     private bool isBoosted;
     [SerializeField] private GameObject[] frontWheels;
     [SerializeField] private Transform backWheels;
+    private bool firstDrift;
     #endregion
 
     #region drifting variables
     private int driftDirection;
-    private bool canDrift;
+    private bool isDrifting;
     private bool canDriveDrift;
     #endregion
 
@@ -45,7 +46,8 @@ public class Driving : MonoBehaviour
     //defining variables
     private void Start()
     {
-        canDrift = true;
+        firstDrift = true;
+        isDrifting = false;
         wheelRotationSpeed = 7;
         turnSpeed = 70;
         speed = 1200;
@@ -57,23 +59,23 @@ public class Driving : MonoBehaviour
     //working with FixedUpdate due to physics
     void FixedUpdate()
     {
+        print(rb.velocity);
         //Dis shit for debugging only
         tmpro.text = rb.velocity.magnitude.ToString();
 
-        driving();
-        if (canDrift)
+        if (!isDrifting)
         {
-            if (Input.GetKey(KeyCode.LeftShift) && Input.GetKey(KeyCode.A))
-            {
-                driftDirection = 0;
-                drift(driftDirection);
-            }
-            else if (Input.GetKey(KeyCode.LeftShift) && Input.GetKey(KeyCode.D))
-            {
-                driftDirection = 1;
-                drift(driftDirection);
-            }
+            driving();
         }
+        else if (isDrifting)
+        {
+            drifting();
+        }
+        if (Input.GetKey(KeyCode.LeftShift) && Input.GetKey(KeyCode.D))
+        {
+            isDrifting = true;
+        }
+        
     }
 
     private void driving()
@@ -94,7 +96,7 @@ public class Driving : MonoBehaviour
             print(deltaRotation);
         }
 
-
+        //key for forward
         if (Input.GetKey(KeyCode.W))
         {
             frontWheels[0].transform.Rotate(0, +wheelRotationSpeed, 0);
@@ -103,11 +105,11 @@ public class Driving : MonoBehaviour
             rb.AddForce(new Vector3(transform.forward.x, 0, transform.forward.z) * speed);
 
             //limits the speed of the kart
-            if (rb.velocity.magnitude >= maxSpeed && isBoosted == false)
+            if (isBoosted == false && rb.velocity.magnitude >= maxSpeed)
             {
                 rb.velocity *= 0.95f;
             }
-            else if (isBoosted && rb.velocity.magnitude >= boostSpeed)
+            else if (isBoosted == true && rb.velocity.magnitude >= boostSpeed)
             {
                 rb.velocity *= 0.95f;
             }
@@ -120,73 +122,12 @@ public class Driving : MonoBehaviour
         }
     }
 
-    private IEnumerator turningDrifting(int direction)
+    //fucntion for drifting
+    private void drifting()
     {
-        switch (direction)
-        {
-            case 0:
-                rb.AddForce(new Vector3(0, 100, 0), ForceMode.Impulse);
-                for (int i = 0; i < 15; i++)
-                {
-                    rotationDirection = new Vector3(0, -turnSpeed, 0);
 
-                    yield return new WaitForSeconds(0.00001f);
-
-                    Quaternion deltaRotation = Quaternion.Euler(rotationDirection * Time.deltaTime);
-                    rb.MoveRotation(rb.rotation * deltaRotation);
-                }
-                rb.AddForce(new Vector3(0, -100, 0), ForceMode.Impulse);
-                for (int i = 0; i < 15; i++)
-                {
-                    rotationDirection = new Vector3(0, -turnSpeed, 0);
-
-                    yield return new WaitForSeconds(0.00001f);
-
-                    Quaternion deltaRotation = Quaternion.Euler(rotationDirection * Time.deltaTime);
-                    rb.MoveRotation(rb.rotation * deltaRotation);
-                }
-                break;
-            case 1:
-                rb.AddForce(new Vector3(0, 100, 0), ForceMode.Impulse);
-                for (int i = 0; i < 15; i++)
-                {
-                    rotationDirection = new Vector3(0, turnSpeed, 0);
-
-                    yield return new WaitForSeconds(0.00001f);
-
-                    Quaternion deltaRotation = Quaternion.Euler(rotationDirection * Time.deltaTime);
-                    rb.MoveRotation(rb.rotation * deltaRotation);
-                }
-                rb.AddForce(new Vector3(0, -100, 0), ForceMode.Impulse);
-                for (int i = 0; i < 15; i++)
-                {
-                    rotationDirection = new Vector3(0, -turnSpeed, 0);
-
-                    yield return new WaitForSeconds(0.00001f);
-
-                    Quaternion deltaRotation = Quaternion.Euler(rotationDirection * Time.deltaTime);
-                    rb.MoveRotation(rb.rotation * deltaRotation);
-                }
-                break;
-        }
     }
-
-    private void drift(int direction)
-    {
-        switch (direction)
-        {
-            case 0:
-
-
-                break;
-
-            case 1:
-
-
-                break;
-        }
-    }
-
+    
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.tag == "ram")
