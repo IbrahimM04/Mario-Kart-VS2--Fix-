@@ -35,6 +35,12 @@ public class Driving : MonoBehaviour
     private int driftDirection;
     private bool isDrifting;
     private bool canDriveDrift;
+    Quaternion deltaRotation;
+    private float driftTimer;
+    #endregion
+
+    #region ramming
+    private Vector3 ImpactAngle;
     #endregion
 
     //defining unity variables such as finding components of gameobjects
@@ -42,12 +48,12 @@ public class Driving : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
         tmpro = GameObject.Find("SpeedText").GetComponent<TextMeshProUGUI>();
-        backWheels = GameObject.Find("backWheels").GetComponentInChildren<Transform>();
     }
 
     //defining variables
     private void Start()
     {
+        driftTimer = 0;
         firstDrift = true;
         isDrifting = false;
         wheelRotationSpeed = 7;
@@ -61,7 +67,7 @@ public class Driving : MonoBehaviour
     //working with FixedUpdate due to physics
     void FixedUpdate()
     {
-        print(rb.velocity);
+        driftTimer += Time.deltaTime;
         //Dis shit for debugging only
         tmpro.text = rb.velocity.magnitude.ToString();
 
@@ -76,12 +82,21 @@ public class Driving : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.LeftShift))
         {
-            driftDirection = 0;
+            driftTimer = 0;
+            driftDirection = 1;
             isDrifting = true;
         }
         if (Input.GetKeyUp(KeyCode.LeftShift))
         {
             isDrifting = false;
+        }
+        if (Input.GetKeyUp(KeyCode.LeftShift) && driftTimer >= 1f && driftTimer < 2f)
+        {
+
+        }
+        else if(Input.GetKeyUp(KeyCode.LeftShift) && driftTimer >= 2f)
+        {
+
         }
     }
 
@@ -91,16 +106,15 @@ public class Driving : MonoBehaviour
         {
             rotationDirection = new Vector3(0, -turnSpeed, 0);
 
-            Quaternion deltaRotation = Quaternion.Euler(rotationDirection * Time.deltaTime);
+            deltaRotation = Quaternion.Euler(rotationDirection * Time.deltaTime);
             rb.MoveRotation(rb.rotation * deltaRotation);
         }
         if (Input.GetKey(KeyCode.D))
         {
             rotationDirection = new Vector3(0, turnSpeed, 0);
 
-            Quaternion deltaRotation = Quaternion.Euler(rotationDirection * Time.deltaTime);
+            deltaRotation = Quaternion.Euler(rotationDirection * Time.deltaTime);
             rb.MoveRotation(rb.rotation * deltaRotation);
-            print(deltaRotation);
         }
 
         //key for forward
@@ -135,20 +149,29 @@ public class Driving : MonoBehaviour
         switch (driftDir)
         {
             case 0:
-                rb.AddForce(new Vector3(transform.forward.x + yeet, 0, transform.forward.z + kek) * speed / 10f);
+                rotationDirection = new Vector3(0, -turnSpeed / 5, 0);
+
+                deltaRotation = Quaternion.Euler(rotationDirection * Time.deltaTime);
+                rb.MoveRotation(rb.rotation * deltaRotation);
+
+                rb.AddForce(new Vector3(transform.forward.x - 1, 0, transform.forward.z + 1) * speed / 2.1f);
                 break;
             case 1:
+                rotationDirection = new Vector3(0, -turnSpeed / 5, 0);
+
+                deltaRotation = Quaternion.Euler(rotationDirection * Time.deltaTime);
+                rb.MoveRotation(rb.rotation * deltaRotation);
+                
                 rb.AddForce(new Vector3(transform.forward.x + 1, 0, transform.forward.z + 1) * speed / 2.1f);
                 break;
         }
-        
     }
     
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.tag == "ram")
         {
-            //ram shitz
+            //ram shit
         }
     }
 }

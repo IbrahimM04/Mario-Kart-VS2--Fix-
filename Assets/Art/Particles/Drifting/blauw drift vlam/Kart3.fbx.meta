@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 9f9f326fa03bbfc44addab8fcdc41a38
+guid: eceb3468a014f9744897ddbaaa85bb0c
 ModelImporter:
   serializedVersion: 23
   fileIDToRecycleName:
@@ -13,24 +13,28 @@ ModelImporter:
     100014: middle
     100016: outlet
     100018: outlet2
-    100020: outside
-    100022: side1
-    100024: side2
-    100026: side3
-    100028: steering_wheel
-    100030: stick
-    100032: Symmetry
-    100034: Symmetry_1
-    100036: Symmetry_2
-    100038: Symmetry_3
-    100040: Symmetry_4
-    100042: Symmetry_5
-    100044: wheel
-    100046: wheel_attachment__front
-    100048: wheel_attachment_back
-    100050: wheel_big
-    100052: wheel_small
-    100054: wheels
+    100020: outlet2_2
+    100022: outside
+    100024: side1
+    100026: side2
+    100028: side3
+    100030: steering_wheel
+    100032: stick
+    100034: Symmetry
+    100036: Symmetry_1
+    100038: Symmetry_2
+    100040: Symmetry_3
+    100042: Symmetry_4
+    100044: Symmetry_5
+    100046: Symmetry_6
+    100048: wheel
+    100050: wheel_attachment__front
+    100052: wheel_attachment_back
+    100054: wheel_big
+    100056: wheel_small
+    100058: wheel_small_1
+    100060: wheel_small_2
+    100062: wheels
     400000: back_cube
     400002: Cinema4D_Editor
     400004: front
@@ -41,24 +45,28 @@ ModelImporter:
     400014: middle
     400016: outlet
     400018: outlet2
-    400020: outside
-    400022: side1
-    400024: side2
-    400026: side3
-    400028: steering_wheel
-    400030: stick
-    400032: Symmetry
-    400034: Symmetry_1
-    400036: Symmetry_2
-    400038: Symmetry_3
-    400040: Symmetry_4
-    400042: Symmetry_5
-    400044: wheel
-    400046: wheel_attachment__front
-    400048: wheel_attachment_back
-    400050: wheel_big
-    400052: wheel_small
-    400054: wheels
+    400020: outlet2_2
+    400022: outside
+    400024: side1
+    400026: side2
+    400028: side3
+    400030: steering_wheel
+    400032: stick
+    400034: Symmetry
+    400036: Symmetry_1
+    400038: Symmetry_2
+    400040: Symmetry_3
+    400042: Symmetry_4
+    400044: Symmetry_5
+    400046: Symmetry_6
+    400048: wheel
+    400050: wheel_attachment__front
+    400052: wheel_attachment_back
+    400054: wheel_big
+    400056: wheel_small
+    400058: wheel_small_1
+    400060: wheel_small_2
+    400062: wheels
     2100000: No Name
     2300000: back_cube
     2300002: front
@@ -67,16 +75,19 @@ ModelImporter:
     2300008: middle
     2300010: outlet
     2300012: outlet2
-    2300014: outside
-    2300016: side1
-    2300018: side2
-    2300020: side3
-    2300022: stick
-    2300024: wheel
-    2300026: wheel_attachment__front
-    2300028: wheel_attachment_back
-    2300030: wheel_big
-    2300032: wheel_small
+    2300014: outlet2_2
+    2300016: outside
+    2300018: side1
+    2300020: side2
+    2300022: side3
+    2300024: stick
+    2300026: wheel
+    2300028: wheel_attachment__front
+    2300030: wheel_attachment_back
+    2300032: wheel_big
+    2300034: wheel_small
+    2300036: wheel_small_1
+    2300038: wheel_small_2
     3300000: back_cube
     3300002: front
     3300004: kart_base
@@ -84,33 +95,39 @@ ModelImporter:
     3300008: middle
     3300010: outlet
     3300012: outlet2
-    3300014: outside
-    3300016: side1
-    3300018: side2
-    3300020: side3
-    3300022: stick
-    3300024: wheel
-    3300026: wheel_attachment__front
-    3300028: wheel_attachment_back
-    3300030: wheel_big
-    3300032: wheel_small
-    4300000: wheel_small
-    4300002: wheel_big
-    4300004: logo
-    4300006: wheel
-    4300008: middle
-    4300010: stick
-    4300012: wheel_attachment_back
-    4300014: wheel_attachment__front
-    4300016: front
-    4300018: side3
-    4300020: side2
-    4300022: side1
-    4300024: outside
-    4300026: outlet2
-    4300028: outlet
-    4300030: back_cube
-    4300032: kart_base
+    3300014: outlet2_2
+    3300016: outside
+    3300018: side1
+    3300020: side2
+    3300022: side3
+    3300024: stick
+    3300026: wheel
+    3300028: wheel_attachment__front
+    3300030: wheel_attachment_back
+    3300032: wheel_big
+    3300034: wheel_small
+    3300036: wheel_small_1
+    3300038: wheel_small_2
+    4300000: wheel_small_1
+    4300002: wheel_small
+    4300004: wheel_small_2
+    4300006: wheel_big
+    4300008: outlet2
+    4300010: logo
+    4300012: wheel
+    4300014: middle
+    4300016: stick
+    4300018: wheel_attachment_back
+    4300020: wheel_attachment__front
+    4300022: front
+    4300024: side3
+    4300026: side2
+    4300028: side1
+    4300030: outside
+    4300032: outlet2_2
+    4300034: outlet
+    4300036: back_cube
+    4300038: kart_base
   externalObjects: {}
   materials:
     importMaterials: 1
