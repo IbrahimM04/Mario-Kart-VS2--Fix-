@@ -94,7 +94,7 @@ public class Driving : MonoBehaviour
         {
 
         }
-        else if(Input.GetKeyUp(KeyCode.LeftShift) && driftTimer >= 2f)
+        else if (Input.GetKeyUp(KeyCode.LeftShift) && driftTimer >= 2f)
         {
 
         }
@@ -161,12 +161,12 @@ public class Driving : MonoBehaviour
 
                 deltaRotation = Quaternion.Euler(rotationDirection * Time.deltaTime);
                 rb.MoveRotation(rb.rotation * deltaRotation);
-                
+
                 rb.AddForce(new Vector3(transform.forward.x + 1, 0, transform.forward.z + 1) * speed / 2.1f);
                 break;
         }
     }
-    
+
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.tag == "ram")

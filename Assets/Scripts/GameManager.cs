@@ -8,22 +8,23 @@ public class GameManager : MonoBehaviour
     private RaycastHit hit;
     [SerializeField] private GameObject[] waypointRaycasts;
     [SerializeField] private LayerMask playerLayer;
-    private int waypointsPassed;
     private int currentWaypoint;
+    //last waypoint
     #endregion
+
+    private TimeTracker timeTracker;
 
     private void Awake()
     {
         waypointRaycasts = GameObject.FindGameObjectsWithTag("Waypoint");
+        timeTracker = GameObject.Find("Waypoints").GetComponentInChildren<TimeTracker>();
     }
 
     private void Start()
     {
         currentWaypoint = 0;
-        waypointsPassed = 0;
     }
 
-    // Update is called once per frame
     void Update()
     {
         Waypoint();
@@ -31,16 +32,16 @@ public class GameManager : MonoBehaviour
 
     private void Waypoint()
     {
-        if (Physics.Raycast(waypointRaycasts[currentWaypoint].gameObject.transform.position, waypointRaycasts[currentWaypoint].gameObject.transform.forward, out hit, 40f, playerLayer))
+        if (currentWaypoint == waypointRaycasts.Length)
         {
-            currentWaypoint++;
-            waypointsPassed++;
-            print("Cholera");
-            if(waypointsPassed >= waypointRaycasts.Length)
+            if (Physics.Raycast(waypointRaycasts[currentWaypoint].gameObject.transform.position, waypointRaycasts[currentWaypoint].gameObject.transform.forward, out hit, 40f, playerLayer))
             {
-                
+
             }
         }
-        Debug.DrawRay(waypointRaycasts[0].transform.position, waypointRaycasts[0].transform.forward);
+        else
+        {
+            currentWaypoint++;
+        }
     }
 }
