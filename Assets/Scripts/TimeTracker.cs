@@ -38,10 +38,6 @@ public class TimeTracker : MonoBehaviour
             milliseconds = Mathf.FloorToInt((timer * 100f) % 100f);
             TimeStamp.text = "Time " + minutes.ToString("00") + ":" + seconds.ToString("00") + ":" + milliseconds.ToString("000");
         }
-        if (Input.GetKeyDown(KeyCode.R))
-        {
-            timer = 0;
-        }
     }
 
     public void ResetTimer()

@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
+    private int lapsFinished;
+
     #region Waypoint variables
     private RaycastHit hit;
     [SerializeField] private GameObject[] waypointRaycasts;
@@ -32,14 +34,15 @@ public class GameManager : MonoBehaviour
 
     private void Waypoint()
     {
-        if (currentWaypoint == waypointRaycasts.Length)
+        if (currentWaypoint == waypointRaycasts.Length - 1)
         {
             if (Physics.Raycast(waypointRaycasts[currentWaypoint].gameObject.transform.position, waypointRaycasts[currentWaypoint].gameObject.transform.forward, out hit, 40f, playerLayer))
             {
-
+                lapsFinished++;
+                timeTracker.ResetTimer();
             }
         }
-        else
+        else if(Physics.Raycast(waypointRaycasts[currentWaypoint].gameObject.transform.position, waypointRaycasts[currentWaypoint].gameObject.transform.forward, out hit, 40f, playerLayer))
         {
             currentWaypoint++;
         }
