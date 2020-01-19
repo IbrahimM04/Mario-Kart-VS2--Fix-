@@ -12,7 +12,7 @@ public class Driving : MonoBehaviour
     #endregion
 
     #region Visual variaibles
-    private ParticleSystem[] boostFlames;
+    private ParticleSystem boostFlames;
     #endregion
 
     #region Speed/Rigidbodies variables
@@ -67,6 +67,7 @@ public class Driving : MonoBehaviour
     //working with FixedUpdate due to physics
     void FixedUpdate()
     {
+
         driftTimer += Time.deltaTime;
         //Dis shit for debugging only
         tmpro.text = rb.velocity.magnitude.ToString();
@@ -149,20 +150,21 @@ public class Driving : MonoBehaviour
         switch (driftDir)
         {
             case 0:
-                rotationDirection = new Vector3(0, -turnSpeed / 5, 0);
+                rotationDirection = new Vector3(0, -turnSpeed / 4, 0);
 
                 deltaRotation = Quaternion.Euler(rotationDirection * Time.deltaTime);
                 rb.MoveRotation(rb.rotation * deltaRotation);
 
-                rb.AddForce(new Vector3(transform.forward.x - 1, 0, transform.forward.z + 1) * speed / 2.1f);
+                rb.AddRelativeForce(transform.forward.x + 1 * 1200, 0, transform.forward.z + 1 * speed);
+
                 break;
             case 1:
-                rotationDirection = new Vector3(0, -turnSpeed / 5, 0);
+                rotationDirection = new Vector3(0, turnSpeed / 4, 0);
 
                 deltaRotation = Quaternion.Euler(rotationDirection * Time.deltaTime);
                 rb.MoveRotation(rb.rotation * deltaRotation);
 
-                rb.AddForce(new Vector3(transform.forward.x + 1, 0, transform.forward.z + 1) * speed / 2.1f);
+                rb.AddRelativeForce(transform.forward.x - 1 * 1200, 0, transform.forward.z + 1 * speed);
                 break;
         }
     }
