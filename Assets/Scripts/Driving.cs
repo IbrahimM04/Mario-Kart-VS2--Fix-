@@ -61,7 +61,12 @@ public class Driving : MonoBehaviour
     //working with FixedUpdate due to physics
     void FixedUpdate()
     {
+<<<<<<< Updated upstream
         print(rb.velocity);
+=======
+
+        driftTimer += Time.deltaTime;
+>>>>>>> Stashed changes
         //Dis shit for debugging only
         tmpro.text = rb.velocity.magnitude.ToString();
 
@@ -135,10 +140,28 @@ public class Driving : MonoBehaviour
         switch (driftDir)
         {
             case 0:
+<<<<<<< Updated upstream
                 rb.AddForce(new Vector3(transform.forward.x + yeet, 0, transform.forward.z + kek) * speed / 10f);
                 break;
             case 1:
                 rb.AddForce(new Vector3(transform.forward.x + 1, 0, transform.forward.z + 1) * speed / 2.1f);
+=======
+                rotationDirection = new Vector3(0, -turnSpeed / 4, 0);
+
+                deltaRotation = Quaternion.Euler(rotationDirection * Time.deltaTime);
+                rb.MoveRotation(rb.rotation * deltaRotation);
+
+                rb.AddRelativeForce(transform.forward.x + 1 * 1200, 0, transform.forward.z + 1 * speed);
+
+                break;
+            case 1:
+                rotationDirection = new Vector3(0, turnSpeed / 4, 0);
+
+                deltaRotation = Quaternion.Euler(rotationDirection * Time.deltaTime);
+                rb.MoveRotation(rb.rotation * deltaRotation);
+
+                rb.AddRelativeForce(transform.forward.x - 1 * 1200, 0, transform.forward.z + 1 * speed);
+>>>>>>> Stashed changes
                 break;
         }
         
