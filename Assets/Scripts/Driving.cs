@@ -7,8 +7,6 @@ public class Driving : MonoBehaviour
 {
     #region Debugging variables
     private TextMeshProUGUI tmpro;
-    public int yeet;
-    public int kek;
     #endregion
 
     #region Visual variaibles
@@ -57,7 +55,7 @@ public class Driving : MonoBehaviour
         firstDrift = true;
         isDrifting = false;
         wheelRotationSpeed = 7;
-        turnSpeed = 70;
+        turnSpeed = 50;
         speed = 1200;
         maxSpeed = 2100;
         isBoosted = false;
@@ -84,7 +82,7 @@ public class Driving : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.LeftShift))
         {
             driftTimer = 0;
-            driftDirection = 1;
+            driftDirection = 0;
             isDrifting = true;
         }
         if (Input.GetKeyUp(KeyCode.LeftShift))
@@ -147,10 +145,24 @@ public class Driving : MonoBehaviour
     //fucntion for drifting
     private void drifting(int driftDir)
     {
+        print(turnSpeed);
+       
         switch (driftDir)
         {
             case 0:
-                rotationDirection = new Vector3(0, -turnSpeed / 4, 0);
+                if (Input.GetKey(KeyCode.D))
+                {
+                    turnSpeed = 35;
+                }
+                else if (Input.GetKey(KeyCode.A))
+                {
+                    turnSpeed = 65;
+                }
+                else
+                {
+                    turnSpeed = 50;
+                }
+                rotationDirection = new Vector3(0, -turnSpeed, 0);
 
                 deltaRotation = Quaternion.Euler(rotationDirection * Time.deltaTime);
                 rb.MoveRotation(rb.rotation * deltaRotation);
@@ -159,7 +171,19 @@ public class Driving : MonoBehaviour
 
                 break;
             case 1:
-                rotationDirection = new Vector3(0, turnSpeed / 4, 0);
+                if (Input.GetKey(KeyCode.A))
+                {
+                    turnSpeed = 35;
+                }
+                else if (Input.GetKey(KeyCode.D))
+                {
+                    turnSpeed = 65;
+                }
+                else
+                {
+                    turnSpeed = 50;
+                }
+                rotationDirection = new Vector3(0, turnSpeed, 0);
 
                 deltaRotation = Quaternion.Euler(rotationDirection * Time.deltaTime);
                 rb.MoveRotation(rb.rotation * deltaRotation);
