@@ -9,8 +9,10 @@ public class Driving : MonoBehaviour
     private TextMeshProUGUI tmpro;
     #endregion
 
-    #region Visual variaibles
-    private ParticleSystem boostFlames;
+    #region Visual variables
+    [SerializeField] private ParticleSystem[] smoke;
+    [SerializeField] private GameObject[] redBoostFlames;
+    [SerializeField] private GameObject[] blueBoostFlames;
     #endregion
 
     #region Speed/Rigidbodies variables
@@ -32,7 +34,6 @@ public class Driving : MonoBehaviour
     #region drifting variables
     private int driftDirection;
     private bool isDrifting;
-    private bool canDriveDrift;
     Quaternion deltaRotation;
     private float driftTimer;
     #endregion
@@ -65,7 +66,6 @@ public class Driving : MonoBehaviour
     //working with FixedUpdate due to physics
     void FixedUpdate()
     {
-
         driftTimer += Time.deltaTime;
         //Dis shit for debugging only
         tmpro.text = rb.velocity.magnitude.ToString();
@@ -146,10 +146,30 @@ public class Driving : MonoBehaviour
     private void drifting(int driftDir)
     {
         print(turnSpeed);
-       
+
         switch (driftDir)
         {
-            case 0:
+            case 0:/*
+                if (driftTimer < 1)
+                {
+                    for (int i = 0; i < smoke.Length; i++)
+                    {
+                        smoke[i].Play();
+                    }
+                }
+                else if(driftTimer > 1 && driftTimer < 2f)
+                {
+                    for (int i = 0; i < smoke.Length; i++)
+                    {
+                        smoke[i].Stop();
+                    }
+
+                    for(int i = 0; i <redBoostFlames.Length; i++)
+                    {
+                        redBoostFlames[i].GetComponent<Animator>().Play();
+                    }
+                }*/
+
                 if (Input.GetKey(KeyCode.D))
                 {
                     turnSpeed = 35;
@@ -168,7 +188,6 @@ public class Driving : MonoBehaviour
                 rb.MoveRotation(rb.rotation * deltaRotation);
 
                 rb.AddRelativeForce(transform.forward.x + 1 * 1200, 0, transform.forward.z + 1 * speed);
-
                 break;
             case 1:
                 if (Input.GetKey(KeyCode.A))
