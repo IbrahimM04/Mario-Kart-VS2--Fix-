@@ -846,7 +846,7 @@ GameObject:
   - component: {fileID: 924864049}
   - component: {fileID: 924864048}
   m_Layer: 0
-  m_Name: RedflameRight
+  m_Name: RedflameRight1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1937,7 +1937,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   smoke: []
-  redBoostFlames: []
+  redBoostFlames:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   blueBoostFlames: []
   speed: 0
   maxSpeed: 0

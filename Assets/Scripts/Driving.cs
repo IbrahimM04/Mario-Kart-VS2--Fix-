@@ -13,6 +13,11 @@ public class Driving : MonoBehaviour
     [SerializeField] private ParticleSystem[] smoke;
     [SerializeField] private GameObject[] redBoostFlames;
     [SerializeField] private GameObject[] blueBoostFlames;
+
+    private bool smokeEnabled;
+    private bool redBoostFlamesEnabled;
+    private bool blueBoostFlamesEnabled;
+
     #endregion
 
     #region Speed/Rigidbodies variables
@@ -47,6 +52,7 @@ public class Driving : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
         tmpro = GameObject.Find("SpeedText").GetComponent<TextMeshProUGUI>();
+        redBoostFlames = GameObject.FindGameObjectsWithTag("RedflameRight");
     }
 
     //defining variables
@@ -66,7 +72,8 @@ public class Driving : MonoBehaviour
     //working with FixedUpdate due to physics
     void FixedUpdate()
     {
-        driftTimer += Time.deltaTime;
+        driftTimer += Time.fixedDeltaTime;
+
         //Dis shit for debugging only
         tmpro.text = rb.velocity.magnitude.ToString();
 
@@ -81,6 +88,11 @@ public class Driving : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.LeftShift))
         {
+            for (int i = 0; i < smoke.Length; i++)
+            {
+                smoke[i].Play();
+            }
+
             driftTimer = 0;
             driftDirection = 0;
             isDrifting = true;
@@ -145,31 +157,45 @@ public class Driving : MonoBehaviour
     //fucntion for drifting
     private void drifting(int driftDir)
     {
-        print(turnSpeed);
+        if (driftTimer > 0 && driftTimer < 1)
+        {
+            if (smokeEnabled == true)
+            {
+                for (int i = 0; i < smoke.Length; i++)
+                {
+                    smoke[i].Stop();
+                }
+                smokeEnabled = false;
+            }
+        }
+
+        if (driftTimer > 1 && driftTimer < 2)
+        {
+            if (redBoostFlamesEnabled == false)
+            {
+                redBoostFlamesEnabled = true;
+                for(int i = 0; i < redBoostFlames.Length; i++)
+                {
+                    redBoostFlames[i].SetActive(true);
+                }
+            }
+        }
+
+        if (driftTimer > 2 && driftTimer < 3)
+        {
+            if (blueBoostFlamesEnabled == false)
+            {
+                blueBoostFlamesEnabled = true;
+                for (int i = 0; i < redBoostFlames.Length; i++)
+                {
+                    blueBoostFlames[i].SetActive(true);
+                }
+            }
+        }
 
         switch (driftDir)
         {
-            case 0:/*
-                if (driftTimer < 1)
-                {
-                    for (int i = 0; i < smoke.Length; i++)
-                    {
-                        smoke[i].Play();
-                    }
-                }
-                else if(driftTimer > 1 && driftTimer < 2f)
-                {
-                    for (int i = 0; i < smoke.Length; i++)
-                    {
-                        smoke[i].Stop();
-                    }
-
-                    for(int i = 0; i <redBoostFlames.Length; i++)
-                    {
-                        redBoostFlames[i].GetComponent<Animator>().Play();
-                    }
-                }*/
-
+            case 0:
                 if (Input.GetKey(KeyCode.D))
                 {
                     turnSpeed = 35;
