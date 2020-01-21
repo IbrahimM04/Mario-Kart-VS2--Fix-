@@ -10,7 +10,7 @@ public class Driving : MonoBehaviour
     #endregion
 
     #region Visual variables
-    [SerializeField] private ParticleSystem[] smoke;
+    [SerializeField] private GameObject[] smoke;
     [SerializeField] private GameObject[] redBoostFlames;
     [SerializeField] private GameObject[] blueBoostFlames;
 
@@ -50,9 +50,10 @@ public class Driving : MonoBehaviour
     //defining unity variables such as finding components of gameobjects
     private void Awake()
     {
+        smoke = GameObject.FindGameObjectsWithTag("PSSmoke");
         rb = GetComponent<Rigidbody>();
         tmpro = GameObject.Find("SpeedText").GetComponent<TextMeshProUGUI>();
-        redBoostFlames = GameObject.FindGameObjectsWithTag("RedflameRight");
+        redBoostFlames = GameObject.FindGameObjectsWithTag("RedFlame");
     }
 
     //defining variables
@@ -67,6 +68,7 @@ public class Driving : MonoBehaviour
         maxSpeed = 2100;
         isBoosted = false;
         maxSpeedReverse = -75;
+        //StartCoroutine(jump(driftDirection));
     }
 
     //working with FixedUpdate due to physics
@@ -88,14 +90,17 @@ public class Driving : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.LeftShift))
         {
-            for (int i = 0; i < smoke.Length; i++)
-            {
-                smoke[i].Play();
-            }
-
             driftTimer = 0;
             driftDirection = 0;
             isDrifting = true;
+
+            redBoostFlamesEnabled = false;
+            smokeEnabled = true;
+            for (int i = 0; i < smoke.Length; i++)
+            {
+                smoke[i].GetComponent<ParticleSystem>().Play();
+            }
+
         }
         if (Input.GetKeyUp(KeyCode.LeftShift))
         {
@@ -154,16 +159,23 @@ public class Driving : MonoBehaviour
         }
     }
 
+    private IEnumerator jump(int driftDir)
+    {
+        rb.AddForce(0, 5500, 0);
+        yield return new WaitForSeconds(0.1f);
+    }
+
     //fucntion for drifting
     private void drifting(int driftDir)
     {
-        if (driftTimer > 0 && driftTimer < 1)
+       
+        if (driftTimer > 1)
         {
             if (smokeEnabled == true)
             {
                 for (int i = 0; i < smoke.Length; i++)
                 {
-                    smoke[i].Stop();
+                    smoke[i].GetComponent<ParticleSystem>().Stop();
                 }
                 smokeEnabled = false;
             }
@@ -174,9 +186,9 @@ public class Driving : MonoBehaviour
             if (redBoostFlamesEnabled == false)
             {
                 redBoostFlamesEnabled = true;
-                for(int i = 0; i < redBoostFlames.Length; i++)
+                for (int i = 0; i < redBoostFlames.Length; i++)
                 {
-                    redBoostFlames[i].SetActive(true);
+                    redBoostFlames[i].GetComponent<SpriteRenderer>().enabled = true;
                 }
             }
         }
@@ -187,12 +199,12 @@ public class Driving : MonoBehaviour
             {
                 for (int i = 0; i < redBoostFlames.Length; i++)
                 {
-                    redBoostFlames[i].SetActive(false);
+                    redBoostFlames[i].GetComponent<SpriteRenderer>().enabled = false;
                 }
                 blueBoostFlamesEnabled = true;
                 for (int i = 0; i < redBoostFlames.Length; i++)
                 {
-                    blueBoostFlames[i].SetActive(true);
+                    blueBoostFlames[i].GetComponent<SpriteRenderer>().enabled = true;
                 }
             }
         }
