@@ -4,12 +4,15 @@ using UnityEngine;
 
 public class MushroomBoost : MonoBehaviour
 {
+    [SerializeField] private GameObject mushroom1;
+    [SerializeField] private GameObject mushroom2;
+    [SerializeField] private GameObject mushroom3;
 
-    [SerializeField]private int itemCount; 
+   [SerializeField] private int itemCount; 
     // Start is called before the first frame update
     void Start()
     {
-        
+        itemCount = 3;
     }
 
     // Update is called once per frame
@@ -24,7 +27,7 @@ public class MushroomBoost : MonoBehaviour
             }
             else if(itemCount == 0)
             {
-
+                //nothing happens here
             }
         }
     }
@@ -32,5 +35,21 @@ public class MushroomBoost : MonoBehaviour
     void UseItem()
     {
         itemCount -= 1;
+        switch (itemCount)
+        {
+            case 2:
+                Destroy(mushroom1);
+                break;
+
+            case 1:
+                Destroy(mushroom2);
+                break;
+
+            case 0:
+                Destroy(mushroom3);
+                break;
+        }
     }
+
+
 }
