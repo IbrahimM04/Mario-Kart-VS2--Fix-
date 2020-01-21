@@ -185,6 +185,10 @@ public class Driving : MonoBehaviour
         {
             if (blueBoostFlamesEnabled == false)
             {
+                for (int i = 0; i < redBoostFlames.Length; i++)
+                {
+                    redBoostFlames[i].SetActive(false);
+                }
                 blueBoostFlamesEnabled = true;
                 for (int i = 0; i < redBoostFlames.Length; i++)
                 {

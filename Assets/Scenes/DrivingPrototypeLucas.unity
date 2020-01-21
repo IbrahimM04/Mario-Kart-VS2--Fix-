@@ -846,7 +846,7 @@ GameObject:
   - component: {fileID: 924864049}
   - component: {fileID: 924864048}
   m_Layer: 0
-  m_Name: RedflameRight1
+  m_Name: RedflameRight
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
