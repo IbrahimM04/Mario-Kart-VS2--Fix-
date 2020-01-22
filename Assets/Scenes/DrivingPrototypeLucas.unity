@@ -718,8 +718,8 @@ GameObject:
   - component: {fileID: 105983468}
   - component: {fileID: 105983466}
   m_Layer: 0
-  m_Name: KartTexturedV2
-  m_TagString: Untagged
+  m_Name: PlayerKart
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -4931,6 +4931,14 @@ GameObject:
   - component: {fileID: 2135180889}
   - component: {fileID: 2135180890}
   - component: {fileID: 2135180891}
+  - component: {fileID: 2135180892}
+  - component: {fileID: 2135180893}
+  - component: {fileID: 2135180894}
+  - component: {fileID: 2135180895}
+  - component: {fileID: 2135180896}
+  - component: {fileID: 2135180897}
+  - component: {fileID: 2135180898}
+  - component: {fileID: 2135180899}
   m_Layer: 0
   m_Name: mario kart track
   m_TagString: Untagged
@@ -5003,6 +5011,110 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.21114434, y: 0.1495935, z: 0.16100323}
   m_Center: {x: 1.0711528, y: 0.02479675, z: 0.058366414}
+--- !u!65 &2135180892
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2135180886}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.0881156, y: 0.18854937, z: 0.19469054}
+  m_Center: {x: 1.1974486, y: 0.04427468, z: 0.1532383}
+--- !u!65 &2135180893
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2135180886}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.2123207, y: 0.1796423, z: 0.38913825}
+  m_Center: {x: 1.070985, y: 0.039821144, z: -0.41462904}
+--- !u!65 &2135180894
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2135180886}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.015822701, y: 0.1781584, z: 2.4548259}
+  m_Center: {x: -0.518218, y: 0.039079197, z: 0.2153902}
+--- !u!65 &2135180895
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2135180886}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1.7293212, y: 0.21424635, z: 0.27333757}
+  m_Center: {x: 0.17871417, y: 0.05712317, z: 1.0112895}
+--- !u!65 &2135180896
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2135180886}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1.5294377, y: 0.28955522, z: 0.6907053}
+  m_Center: {x: 1.3488746, y: 0.09477761, z: 0.9788004}
+--- !u!65 &2135180897
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2135180886}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.98295736, y: 0.2158697, z: 0.3496415}
+  m_Center: {x: -0.46587947, y: 0.057934813, z: -0.7886471}
+--- !u!65 &2135180898
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2135180886}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1.9007001, y: 0.2788151, z: 0.052960142}
+  m_Center: {x: 0.9003498, y: 0.08940755, z: -0.90425044}
+--- !u!65 &2135180899
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2135180886}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.16419002, y: 0.21465684, z: 1.9337171}
+  m_Center: {x: 1.582461, y: 0.057328418, z: -0.17264992}
 --- !u!23 &2137446640
 MeshRenderer:
   m_ObjectHideFlags: 0
