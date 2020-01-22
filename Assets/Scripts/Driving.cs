@@ -13,6 +13,7 @@ public class Driving : MonoBehaviour
     [SerializeField] private GameObject[] smoke;
     [SerializeField] private GameObject[] redBoostFlames;
     [SerializeField] private GameObject[] blueBoostFlames;
+    [SerializeField] private float gravityScale;
 
     private bool smokeEnabled;
     private bool redBoostFlamesEnabled;
@@ -61,6 +62,7 @@ public class Driving : MonoBehaviour
     //defining variables
     private void Start()
     {
+        //drifter = driftingCoroutine(driftDirection);
         driftTimer = 0;
         firstDrift = true;
         isDrifting = false;
@@ -87,29 +89,31 @@ public class Driving : MonoBehaviour
         }
         else if (isDrifting)
         {
+            print("working? Working!");
             drifting(driftDirection);
         }
 
         if (Input.GetKeyDown(KeyCode.LeftShift))
         {
+            isDrifting = true;
             driftTimer = 0;
             driftDirection = 0;
-            isDrifting = true;
-
-            redBoostFlamesEnabled = false;
-            smokeEnabled = true;
-            for (int i = 0; i < smoke.Length; i++)
-            {
-                smoke[i].GetComponent<ParticleSystem>().Play();
-            }
             StartCoroutine(driftingCoroutine(driftDirection));
 
+            print("Start drifting");
         }
+
         if (Input.GetKeyUp(KeyCode.LeftShift))
         {
-            driftTimer = 0;
             isDrifting = false;
+            driftTimer = 0;
+            StopCoroutine(driftingCoroutine(0));
+
+            clearAllEffects();
+
+            print("Stop drifting");
         }
+        /*
         if (Input.GetKeyUp(KeyCode.LeftShift) && driftTimer >= 1f && driftTimer < 2f)
         {
 
@@ -118,6 +122,9 @@ public class Driving : MonoBehaviour
         {
 
         }
+        */
+
+        rb.MovePosition(rb.position + new Vector3(0, gravityScale, 0));
     }
 
     private void driving()
@@ -163,6 +170,11 @@ public class Driving : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Drifting timer
+    /// </summary>
+    /// <param name="driftDir"></param>
+    /// <returns></returns>
     private IEnumerator driftingCoroutine(int driftDir)
     {
         rb.AddForce(0, 6000, 0);
@@ -170,6 +182,11 @@ public class Driving : MonoBehaviour
         yield return new WaitForSeconds(0.1f);
 
         rb.AddForce(0, -8000, 0);
+
+        for (int i = 0; i < smoke.Length; i++)
+        {
+            smoke[i].GetComponent<ParticleSystem>().Play();
+        }
 
         yield return new WaitForSeconds(1f);
 
@@ -217,6 +234,7 @@ public class Driving : MonoBehaviour
                 rotationDirection = new Vector3(0, -turnSpeed, 0);
 
                 deltaRotation = Quaternion.Euler(rotationDirection * Time.deltaTime);
+                //deltaRotation.z = 0;
                 rb.MoveRotation(rb.rotation * deltaRotation);
 
                 rb.AddRelativeForce(transform.forward.x + 1 * 1200, 0, transform.forward.z + 1 * speed);
@@ -237,10 +255,29 @@ public class Driving : MonoBehaviour
                 rotationDirection = new Vector3(0, turnSpeed, 0);
 
                 deltaRotation = Quaternion.Euler(rotationDirection * Time.deltaTime);
+                //deltaRotation.z = 0;
                 rb.MoveRotation(rb.rotation * deltaRotation);
 
                 rb.AddRelativeForce(transform.forward.x - 1 * 1200, 0, transform.forward.z + 1 * speed);
                 break;
+        }
+    }
+
+    private void clearAllEffects()
+    {
+        for (int i = 0; i < smoke.Length; i++)
+        {
+            smoke[i].GetComponent<ParticleSystem>().Stop();
+        }
+
+        for (int i = 0; i < redBoostFlames.Length; i++)
+        {
+            redBoostFlames[i].GetComponent<SpriteRenderer>().enabled = false;
+        }
+
+        for (int i = 0; i < blueBoostFlames.Length; i++)
+        {
+            blueBoostFlames[i].GetComponent<SpriteRenderer>().enabled = false;
         }
     }
 
