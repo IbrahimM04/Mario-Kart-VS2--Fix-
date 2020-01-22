@@ -67,11 +67,11 @@ public class Driving : MonoBehaviour
         firstDrift = true;
         isDrifting = false;
         wheelRotationSpeed = 7;
-        turnSpeed = 50;
-        speed = 1200;
+        turnSpeed = 60;
+        speed = 800;
         maxSpeed = 2100;
         isBoosted = false;
-        maxSpeedReverse = -75;
+        maxSpeedReverse = -200;
 
     }
 
@@ -147,8 +147,8 @@ public class Driving : MonoBehaviour
         //key for forward
         if (Input.GetKey(KeyCode.W))
         {
-            frontWheels[0].transform.Rotate(0, +wheelRotationSpeed, 0);
-            backWheels.transform.Rotate(0, +wheelRotationSpeed, 0);
+            //frontWheels[0].transform.Rotate(+wheelRotationSpeed, 0, 0);
+            //backWheels.transform.Rotate(+wheelRotationSpeed, 0, 0);
 
             rb.AddForce(new Vector3(transform.forward.x, 0, transform.forward.z) * speed);
 
@@ -165,8 +165,8 @@ public class Driving : MonoBehaviour
         else if (Input.GetKey(KeyCode.S))
         {
             rb.AddForce(new Vector3(transform.forward.x, 0, transform.forward.z) * maxSpeedReverse);
-            frontWheels[0].transform.Rotate(0, -wheelRotationSpeed / 3, 0);
-            backWheels.transform.Rotate(0, -wheelRotationSpeed / 3, 0);
+            //frontWheels[0].transform.Rotate(0, -wheelRotationSpeed / 3, 0);
+            //backWheels.transform.Rotate(0, -wheelRotationSpeed / 3, 0);
         }
     }
 
@@ -237,7 +237,7 @@ public class Driving : MonoBehaviour
                 //deltaRotation.z = 0;
                 rb.MoveRotation(rb.rotation * deltaRotation);
 
-                rb.AddRelativeForce(transform.forward.x + 1 * 1200, 0, transform.forward.z + 1 * speed);
+                rb.AddRelativeForce(transform.forward.x + 1 * 800, 0, transform.forward.z + 1 * speed);
                 break;
             case 1:
                 if (Input.GetKey(KeyCode.A))
@@ -258,7 +258,7 @@ public class Driving : MonoBehaviour
                 //deltaRotation.z = 0;
                 rb.MoveRotation(rb.rotation * deltaRotation);
 
-                rb.AddRelativeForce(transform.forward.x - 1 * 1200, 0, transform.forward.z + 1 * speed);
+                rb.AddRelativeForce(transform.forward.x - 1 * 800, 0, transform.forward.z + 1 * speed);
                 break;
         }
     }
