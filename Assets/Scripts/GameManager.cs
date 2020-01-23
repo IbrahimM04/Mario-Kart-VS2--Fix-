@@ -12,9 +12,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameObject[] waypointRaycasts;
     [SerializeField] private LayerMask playerLayer;
     private int currentWaypoint;
-
-    bool yeet;
-    bool kek;
+    
     //last waypoint
     #endregion
 
@@ -28,7 +26,6 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-        kek = true;
         currentWaypoint = 0;
         fuckyou = 0;
     }
@@ -37,16 +34,10 @@ public class GameManager : MonoBehaviour
     {
         if (fuckyou >= 2)
         {
-            if(kek == true)
-            {
-                print("yes to kek");
-                kek = false;
-                timeTracker.ResetTimer();
-            }
             
         }
         //Waypoint();
-        CheckLastWaypoint();
+        CheatFuckYou();
     }
 
     private void Waypoint()
@@ -65,23 +56,12 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    private void CheckLastWaypoint()
+    private void CheatFuckYou()
     {
         if(Physics.Raycast(waypointRaycasts[currentWaypoint].gameObject.transform.position, waypointRaycasts[currentWaypoint].gameObject.transform.forward, out hit, 40f, playerLayer))
         {
-            if(yeet == true)
-            {
-                print("yes to yeet");
-                fuckyou++;
-                StartCoroutine(delay());
-            }
+            
         }
     }
-
-    private IEnumerator delay()
-    {
-        yeet = false;
-        yield return new WaitForSeconds(1);
-        yeet = true;
-    }
+    
 }

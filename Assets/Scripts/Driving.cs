@@ -57,7 +57,7 @@ public class Driving : MonoBehaviour
     //defining unity variables such as finding components of gameobjects
     private void Awake()
     {
-        windTrails = GameObject.Find("Smoke Trails").GetComponent<ParticleSystem>();
+        //windTrails = GameObject.Find("Smoke Trails").GetComponent<ParticleSystem>();
         playerAnimator = GameObject.FindGameObjectWithTag("PlayerModel").GetComponent<Animator>();
         smoke = GameObject.FindGameObjectsWithTag("PSSmoke");
         rb = GetComponent<Rigidbody>();
@@ -86,10 +86,10 @@ public class Driving : MonoBehaviour
     void FixedUpdate()
     {
         print(isBoosted);
-        if(isBoosted == true)
+        if (isBoosted == true)
         {
             speed = 2200;
-            windTrails.Play();
+            //windTrails.Play();
         }
         else
         {
@@ -133,7 +133,7 @@ public class Driving : MonoBehaviour
 
             print("Stop drifting");
             StartCoroutine(boost(speedBoostLevel));
-            print(speedBoostLevel);
+            StartCoroutine(turnBack());
         }
         /*
         if (Input.GetKeyUp(KeyCode.LeftShift) && driftTimer >= 1f && driftTimer < 2f)
@@ -299,6 +299,20 @@ public class Driving : MonoBehaviour
         isBoosted = true;
         yield return new WaitForSeconds(seconds);
         isBoosted = false;
+    }
+
+    private IEnumerator turnBack()
+    {
+        for (int i = 0; i < 20; i++)
+        {
+            rotationDirection = new Vector3(0, -driftTurnSpeed, 0);
+
+            deltaRotation = Quaternion.Euler(rotationDirection * Time.deltaTime);
+            //deltaRotation.z = 0;
+            rb.MoveRotation(rb.rotation * deltaRotation);
+            yield return new WaitForSeconds(0.0001f);
+        }
+
     }
 
     private void clearAllEffects()
