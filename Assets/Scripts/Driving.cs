@@ -61,7 +61,6 @@ public class Driving : MonoBehaviour
         playerAnimator = GameObject.FindGameObjectWithTag("PlayerModel").GetComponent<Animator>();
         smoke = GameObject.FindGameObjectsWithTag("PSSmoke");
         rb = GetComponent<Rigidbody>();
-        tmpro = GameObject.Find("SpeedText").GetComponent<TextMeshProUGUI>();
         redBoostFlames = GameObject.FindGameObjectsWithTag("RedFlame");
         blueBoostFlames = GameObject.FindGameObjectsWithTag("BlueFlame");
     }
@@ -86,9 +85,10 @@ public class Driving : MonoBehaviour
     //working with FixedUpdate due to physics
     void FixedUpdate()
     {
+        print(isBoosted);
         if(isBoosted == true)
         {
-            speed = 960;
+            speed = 2200;
             windTrails.Play();
         }
         else
@@ -102,9 +102,6 @@ public class Driving : MonoBehaviour
         }
         timer += Time.deltaTime;
         driftTimer += Time.fixedDeltaTime;
-
-        //Dis shit for debugging only
-        tmpro.text = rb.velocity.magnitude.ToString();
 
         if (!isDrifting)
         {
@@ -136,6 +133,7 @@ public class Driving : MonoBehaviour
 
             print("Stop drifting");
             StartCoroutine(boost(speedBoostLevel));
+            print(speedBoostLevel);
         }
         /*
         if (Input.GetKeyUp(KeyCode.LeftShift) && driftTimer >= 1f && driftTimer < 2f)
@@ -274,15 +272,15 @@ public class Driving : MonoBehaviour
             case 1:
                 if (Input.GetKey(KeyCode.A))
                 {
-                    driftTurnSpeed = 30;
+                    driftTurnSpeed = 45;
                 }
                 else if (Input.GetKey(KeyCode.D))
                 {
-                    driftTurnSpeed = 70;
+                    driftTurnSpeed = 75;
                 }
                 else
                 {
-                    driftTurnSpeed = 50;
+                    driftTurnSpeed = 60;
                 }
                 rotationDirection = new Vector3(0, driftTurnSpeed, 0);
 
@@ -297,6 +295,7 @@ public class Driving : MonoBehaviour
 
     private IEnumerator boost(float seconds)
     {
+        print(seconds);
         isBoosted = true;
         yield return new WaitForSeconds(seconds);
         isBoosted = false;

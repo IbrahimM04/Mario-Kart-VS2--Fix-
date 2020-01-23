@@ -13,11 +13,6 @@ public class TimeTracker : MonoBehaviour
     int seconds;
     int milliseconds;
 
-    private void Awake()
-    {
-        TimeStamp = GameObject.Find("TimeStamp").GetComponent<TextMeshProUGUI>();
-    }
-
     private void Start()
     {
         playing = true;
@@ -36,7 +31,7 @@ public class TimeTracker : MonoBehaviour
             minutes = Mathf.FloorToInt(timer / 60f);
             seconds = Mathf.FloorToInt(timer % 60f);
             milliseconds = Mathf.FloorToInt((timer * 100f) % 100f);
-            TimeStamp.text = "Time " + minutes.ToString("00") + ":" + seconds.ToString("00") + ":" + milliseconds.ToString("000");
+            TimeStamp.text = "time: " + minutes.ToString("00") + ":" + seconds.ToString("00") + ":" + milliseconds.ToString("000");
         }
     }
 
