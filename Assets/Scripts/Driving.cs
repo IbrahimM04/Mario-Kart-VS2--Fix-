@@ -5,6 +5,7 @@ using TMPro;
 
 public class Driving : MonoBehaviour
 {
+    private float timer;
     #region Debugging variables
     private TextMeshProUGUI tmpro;
     #endregion
@@ -22,9 +23,6 @@ public class Driving : MonoBehaviour
     private bool blueBoostFlamesEnabled;
 
     #endregion
-
-    private bool leftD;
-    private bool rightD;
 
     #region Speed/Rigidbodies variables
     private float wheelRotationSpeed;
@@ -69,6 +67,7 @@ public class Driving : MonoBehaviour
     //defining variables
     private void Start()
     {
+        timer = 0;
         //drifter = driftingCoroutine(driftDirection);
         driftTimer = 0;
         firstDrift = true;
@@ -85,6 +84,12 @@ public class Driving : MonoBehaviour
     //working with FixedUpdate due to physics
     void FixedUpdate()
     {
+        if (timer >= 1)
+        {
+            timer = 0;
+            playerAnimator.SetInteger("AnimState", 0);
+        }
+        timer += Time.deltaTime;
         driftTimer += Time.fixedDeltaTime;
 
         //Dis shit for debugging only
@@ -93,14 +98,6 @@ public class Driving : MonoBehaviour
         if (!isDrifting)
         {
             driving();
-            if(rightD == true)
-            {
-                right();
-            }
-            else if(leftD == true)
-            {
-                left();
-            }
         }
         else if (isDrifting)
         {
@@ -144,21 +141,21 @@ public class Driving : MonoBehaviour
 
     private void driving()
     {
-        if (Input.GetKeyDown(KeyCode.A))
+        if (Input.GetKey(KeyCode.A))
         {
-            leftD = true;
+            playerAnimator.SetInteger("AnimState", 3);
+            rotationDirection = new Vector3(0, -turnSpeed, 0);
+
+            deltaRotation = Quaternion.Euler(rotationDirection * Time.deltaTime);
+            rb.MoveRotation(rb.rotation * deltaRotation);
         }
-        if (Input.GetKeyUp(KeyCode.A))
+        if (Input.GetKey(KeyCode.D))
         {
-            leftD = false;
-        }
-        if (Input.GetKeyDown(KeyCode.D))
-        {
-            rightD = true;
-        }
-        if (Input.GetKeyUp(KeyCode.D))
-        {
-            rightD = false;
+            playerAnimator.SetInteger("AnimState", 4);
+            rotationDirection = new Vector3(0, turnSpeed, 0);
+
+            deltaRotation = Quaternion.Euler(rotationDirection * Time.deltaTime);
+            rb.MoveRotation(rb.rotation * deltaRotation);
         }
 
         //key for forward
@@ -187,23 +184,6 @@ public class Driving : MonoBehaviour
         }
     }
 
-    private void left()
-    {
-        playerAnimator.SetInteger("AnimState", 3);
-        rotationDirection = new Vector3(0, -turnSpeed, 0);
-
-        deltaRotation = Quaternion.Euler(rotationDirection * Time.deltaTime);
-        rb.MoveRotation(rb.rotation * deltaRotation);
-    }
-
-    private void right()
-    {
-        rotationDirection = new Vector3(0, turnSpeed, 0);
-
-        deltaRotation = Quaternion.Euler(rotationDirection * Time.deltaTime);
-        rb.MoveRotation(rb.rotation * deltaRotation);
-    }
-
     /// <summary>
     /// Drifting timer
     /// </summary>
@@ -222,7 +202,7 @@ public class Driving : MonoBehaviour
             smoke[i].GetComponent<ParticleSystem>().Play();
         }
 
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(1f);
 
         for (int i = 0; i < smoke.Length; i++)
         {
@@ -234,7 +214,7 @@ public class Driving : MonoBehaviour
             redBoostFlames[i].GetComponent<SpriteRenderer>().enabled = true;
         }
 
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(1.5f);
 
         for (int i = 0; i < redBoostFlames.Length; i++)
         {
