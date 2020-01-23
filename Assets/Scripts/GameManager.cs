@@ -19,7 +19,7 @@ public class GameManager : MonoBehaviour
     private void Awake()
     {
         waypointRaycasts = GameObject.FindGameObjectsWithTag("Waypoint");
-        timeTracker = GameObject.Find("Waypoints").GetComponentInChildren<TimeTracker>();
+        //timeTracker = GameObject.Find("Waypoints").GetComponentInChildren<TimeTracker>();
     }
 
     private void Start()
@@ -29,7 +29,7 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
-        Waypoint();
+        //Waypoint();
     }
 
     private void Waypoint()

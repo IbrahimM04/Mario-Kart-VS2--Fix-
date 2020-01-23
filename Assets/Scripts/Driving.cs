@@ -9,6 +9,8 @@ public class Driving : MonoBehaviour
     private TextMeshProUGUI tmpro;
     #endregion
 
+    private Animator playerAnimator;
+
     #region Visual variables
     [SerializeField] private GameObject[] smoke;
     [SerializeField] private GameObject[] redBoostFlames;
@@ -20,6 +22,9 @@ public class Driving : MonoBehaviour
     private bool blueBoostFlamesEnabled;
 
     #endregion
+
+    private bool leftD;
+    private bool rightD;
 
     #region Speed/Rigidbodies variables
     private float wheelRotationSpeed;
@@ -38,6 +43,7 @@ public class Driving : MonoBehaviour
     #endregion
 
     #region drifting variables
+    private int driftTurnSpeed;
     private int driftDirection;
     private bool isDrifting;
     Quaternion deltaRotation;
@@ -52,6 +58,7 @@ public class Driving : MonoBehaviour
     //defining unity variables such as finding components of gameobjects
     private void Awake()
     {
+        playerAnimator = GameObject.FindGameObjectWithTag("PlayerModel").GetComponent<Animator>();
         smoke = GameObject.FindGameObjectsWithTag("PSSmoke");
         rb = GetComponent<Rigidbody>();
         tmpro = GameObject.Find("SpeedText").GetComponent<TextMeshProUGUI>();
@@ -86,6 +93,14 @@ public class Driving : MonoBehaviour
         if (!isDrifting)
         {
             driving();
+            if(rightD == true)
+            {
+                right();
+            }
+            else if(leftD == true)
+            {
+                left();
+            }
         }
         else if (isDrifting)
         {
@@ -129,19 +144,21 @@ public class Driving : MonoBehaviour
 
     private void driving()
     {
-        if (Input.GetKey(KeyCode.A))
+        if (Input.GetKeyDown(KeyCode.A))
         {
-            rotationDirection = new Vector3(0, -turnSpeed, 0);
-
-            deltaRotation = Quaternion.Euler(rotationDirection * Time.deltaTime);
-            rb.MoveRotation(rb.rotation * deltaRotation);
+            leftD = true;
         }
-        if (Input.GetKey(KeyCode.D))
+        if (Input.GetKeyUp(KeyCode.A))
         {
-            rotationDirection = new Vector3(0, turnSpeed, 0);
-
-            deltaRotation = Quaternion.Euler(rotationDirection * Time.deltaTime);
-            rb.MoveRotation(rb.rotation * deltaRotation);
+            leftD = false;
+        }
+        if (Input.GetKeyDown(KeyCode.D))
+        {
+            rightD = true;
+        }
+        if (Input.GetKeyUp(KeyCode.D))
+        {
+            rightD = false;
         }
 
         //key for forward
@@ -170,6 +187,23 @@ public class Driving : MonoBehaviour
         }
     }
 
+    private void left()
+    {
+        playerAnimator.SetInteger("AnimState", 3);
+        rotationDirection = new Vector3(0, -turnSpeed, 0);
+
+        deltaRotation = Quaternion.Euler(rotationDirection * Time.deltaTime);
+        rb.MoveRotation(rb.rotation * deltaRotation);
+    }
+
+    private void right()
+    {
+        rotationDirection = new Vector3(0, turnSpeed, 0);
+
+        deltaRotation = Quaternion.Euler(rotationDirection * Time.deltaTime);
+        rb.MoveRotation(rb.rotation * deltaRotation);
+    }
+
     /// <summary>
     /// Drifting timer
     /// </summary>
@@ -188,7 +222,7 @@ public class Driving : MonoBehaviour
             smoke[i].GetComponent<ParticleSystem>().Play();
         }
 
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(0.5f);
 
         for (int i = 0; i < smoke.Length; i++)
         {
@@ -200,7 +234,7 @@ public class Driving : MonoBehaviour
             redBoostFlames[i].GetComponent<SpriteRenderer>().enabled = true;
         }
 
-        yield return new WaitForSeconds(1.5f);
+        yield return new WaitForSeconds(1f);
 
         for (int i = 0; i < redBoostFlames.Length; i++)
         {
@@ -221,44 +255,44 @@ public class Driving : MonoBehaviour
             case 0:
                 if (Input.GetKey(KeyCode.D))
                 {
-                    turnSpeed = 35;
+                    driftTurnSpeed = 45;
                 }
                 else if (Input.GetKey(KeyCode.A))
                 {
-                    turnSpeed = 65;
+                    driftTurnSpeed = 75;
                 }
                 else
                 {
-                    turnSpeed = 50;
+                    driftTurnSpeed = 60;
                 }
-                rotationDirection = new Vector3(0, -turnSpeed, 0);
+                rotationDirection = new Vector3(0, -driftTurnSpeed, 0);
 
                 deltaRotation = Quaternion.Euler(rotationDirection * Time.deltaTime);
                 //deltaRotation.z = 0;
                 rb.MoveRotation(rb.rotation * deltaRotation);
 
-                rb.AddRelativeForce(transform.forward.x + 1 * 800, 0, transform.forward.z + 1 * speed);
+                rb.AddRelativeForce(transform.forward.x + 1 * 400, 0, transform.forward.z + 1.3f * speed);
                 break;
             case 1:
                 if (Input.GetKey(KeyCode.A))
                 {
-                    turnSpeed = 35;
+                    driftTurnSpeed = 35;
                 }
                 else if (Input.GetKey(KeyCode.D))
                 {
-                    turnSpeed = 65;
+                    driftTurnSpeed = 65;
                 }
                 else
                 {
-                    turnSpeed = 50;
+                    driftTurnSpeed = 50;
                 }
-                rotationDirection = new Vector3(0, turnSpeed, 0);
+                rotationDirection = new Vector3(0, driftTurnSpeed, 0);
 
                 deltaRotation = Quaternion.Euler(rotationDirection * Time.deltaTime);
                 //deltaRotation.z = 0;
                 rb.MoveRotation(rb.rotation * deltaRotation);
 
-                rb.AddRelativeForce(transform.forward.x - 1 * 800, 0, transform.forward.z + 1 * speed);
+                rb.AddRelativeForce(transform.forward.x - 1 * 400, 0, transform.forward.z + 1.3f * speed);
                 break;
         }
     }

@@ -8,6 +8,7 @@ TagManager:
   - RedFlame
   - PSSmoke
   - BlueFlame
+  - PlayerModel
   layers:
   - Default
   - TransparentFX
