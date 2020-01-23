@@ -13,6 +13,7 @@ public class Driving : MonoBehaviour
     private Animator playerAnimator;
 
     #region Visual variables
+    private ParticleSystem windTrails;
     [SerializeField] private GameObject[] smoke;
     [SerializeField] private GameObject[] redBoostFlames;
     [SerializeField] private GameObject[] blueBoostFlames;
@@ -29,7 +30,7 @@ public class Driving : MonoBehaviour
     private float rotationX;
     private Rigidbody rb;
     private Vector3 rotationDirection;
-    [SerializeField] private int speed;
+    [SerializeField] private float speed;
     [SerializeField] private int maxSpeed;
     [SerializeField] private int maxSpeedReverse;
     [SerializeField] private int boostSpeed;
@@ -46,7 +47,7 @@ public class Driving : MonoBehaviour
     private bool isDrifting;
     Quaternion deltaRotation;
     private float driftTimer;
-    int speedBoostLevel;
+    float speedBoostLevel;
     #endregion
 
     #region ramming
@@ -56,6 +57,7 @@ public class Driving : MonoBehaviour
     //defining unity variables such as finding components of gameobjects
     private void Awake()
     {
+        windTrails = GameObject.Find("Smoke Trails").GetComponent<ParticleSystem>();
         playerAnimator = GameObject.FindGameObjectWithTag("PlayerModel").GetComponent<Animator>();
         smoke = GameObject.FindGameObjectsWithTag("PSSmoke");
         rb = GetComponent<Rigidbody>();
@@ -84,6 +86,15 @@ public class Driving : MonoBehaviour
     //working with FixedUpdate due to physics
     void FixedUpdate()
     {
+        if(isBoosted == true)
+        {
+            speed = 960;
+            windTrails.Play();
+        }
+        else
+        {
+            speed = 800;
+        }
         if (timer >= 1)
         {
             timer = 0;
@@ -109,7 +120,7 @@ public class Driving : MonoBehaviour
         {
             isDrifting = true;
             driftTimer = 0;
-            driftDirection = 0;
+            driftDirection = 1;
             StartCoroutine(driftingCoroutine(driftDirection));
 
             print("Start drifting");
@@ -124,6 +135,7 @@ public class Driving : MonoBehaviour
             clearAllEffects();
 
             print("Stop drifting");
+            StartCoroutine(boost(speedBoostLevel));
         }
         /*
         if (Input.GetKeyUp(KeyCode.LeftShift) && driftTimer >= 1f && driftTimer < 2f)
@@ -204,10 +216,14 @@ public class Driving : MonoBehaviour
 
         yield return new WaitForSeconds(1f);
 
+        speedBoostLevel = 0;
+
         for (int i = 0; i < smoke.Length; i++)
         {
             smoke[i].GetComponent<ParticleSystem>().Stop();
         }
+
+        speedBoostLevel = 1;
 
         for (int i = 0; i < redBoostFlames.Length; i++)
         {
@@ -220,6 +236,8 @@ public class Driving : MonoBehaviour
         {
             redBoostFlames[i].GetComponent<SpriteRenderer>().enabled = false;
         }
+
+        speedBoostLevel = 2;
 
         for (int i = 0; i < blueBoostFlames.Length; i++)
         {
@@ -256,11 +274,11 @@ public class Driving : MonoBehaviour
             case 1:
                 if (Input.GetKey(KeyCode.A))
                 {
-                    driftTurnSpeed = 35;
+                    driftTurnSpeed = 30;
                 }
                 else if (Input.GetKey(KeyCode.D))
                 {
-                    driftTurnSpeed = 65;
+                    driftTurnSpeed = 70;
                 }
                 else
                 {
@@ -275,6 +293,13 @@ public class Driving : MonoBehaviour
                 rb.AddRelativeForce(transform.forward.x - 1 * 400, 0, transform.forward.z + 1.3f * speed);
                 break;
         }
+    }
+
+    private IEnumerator boost(float seconds)
+    {
+        isBoosted = true;
+        yield return new WaitForSeconds(seconds);
+        isBoosted = false;
     }
 
     private void clearAllEffects()
