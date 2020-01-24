@@ -4,5 +4,8 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Scenes/DrivingPrototypeLucas.unity
+    guid: 96eeef3841c0be54c9eebe70d08d6842
   m_configObjects: {}

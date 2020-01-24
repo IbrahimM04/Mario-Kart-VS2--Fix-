@@ -5,6 +5,8 @@ using TMPro;
 
 public class Driving : MonoBehaviour
 {
+    private int driveState;
+
     private float timer;
     #region Debugging variables
     private TextMeshProUGUI tmpro;
@@ -85,75 +87,85 @@ public class Driving : MonoBehaviour
     //working with FixedUpdate due to physics
     void FixedUpdate()
     {
-        print(isBoosted);
+        if (!isDrifting)
+        {
+            steering();
+        }
+
+        if (Input.GetKey(KeyCode.W))
+        {
+            driveState = 1;
+        }
+        else if (Input.GetKey(KeyCode.S))
+        {
+            driveState = 2;
+        }
+        else if (Input.GetKey(KeyCode.LeftShift) && Input.GetKey(KeyCode.D))
+        {
+            driftDirection = 0;
+            driveState = 3;
+        }
+        else if(Input.GetKey(KeyCode.LeftShift) && Input.GetKey(KeyCode.S))
+        {
+            driftDirection = 1;
+            driveState = 4;
+        }
+        else
+        {
+            driveState = 0;
+        }
+
+        switch (driveState)
+        {
+            case 0:
+                break;
+            case 1:
+                DrivingForward();
+                break;
+            case 2:
+                DrivingBackward();
+                break;
+            case 3:
+                if (firstDrift)
+                {
+                    StartCoroutine(driftingCoroutine(driftDirection));
+                }
+                drifting(driftDirection);
+                break;
+            case 4:
+                if (firstDrift)
+                {
+                    StartCoroutine(driftingCoroutine(driftDirection));
+                }
+                drifting(driftDirection);
+                break;
+        }
+
         if (isBoosted == true)
         {
             speed = 2200;
-            //windTrails.Play();
         }
         else
         {
             speed = 800;
         }
+
         if (timer >= 1)
         {
             timer = 0;
             playerAnimator.SetInteger("AnimState", 0);
         }
+
         timer += Time.deltaTime;
         driftTimer += Time.fixedDeltaTime;
-
-        if (!isDrifting)
-        {
-            driving();
-        }
-        else if (isDrifting)
-        {
-            print("working? Working!");
-            drifting(driftDirection);
-        }
-
-        if (Input.GetKeyDown(KeyCode.LeftShift))
-        {
-            isDrifting = true;
-            driftTimer = 0;
-            driftDirection = 1;
-            StartCoroutine(driftingCoroutine(driftDirection));
-
-            print("Start drifting");
-        }
-
-        if (Input.GetKeyUp(KeyCode.LeftShift))
-        {
-            isDrifting = false;
-            driftTimer = 0;
-            StopCoroutine(driftingCoroutine(0));
-
-            clearAllEffects();
-
-            print("Stop drifting");
-            StartCoroutine(boost(speedBoostLevel));
-            StartCoroutine(turnBack());
-        }
-        /*
-        if (Input.GetKeyUp(KeyCode.LeftShift) && driftTimer >= 1f && driftTimer < 2f)
-        {
-
-        }
-        else if (Input.GetKeyUp(KeyCode.LeftShift) && driftTimer >= 2f)
-        {
-
-        }
-        */
 
         rb.MovePosition(rb.position + new Vector3(0, gravityScale, 0));
     }
 
-    private void driving()
+    private void steering()
     {
         if (Input.GetKey(KeyCode.A))
         {
-            playerAnimator.SetInteger("AnimState", 3);
             rotationDirection = new Vector3(0, -turnSpeed, 0);
 
             deltaRotation = Quaternion.Euler(rotationDirection * Time.deltaTime);
@@ -161,37 +173,31 @@ public class Driving : MonoBehaviour
         }
         if (Input.GetKey(KeyCode.D))
         {
-            playerAnimator.SetInteger("AnimState", 4);
             rotationDirection = new Vector3(0, turnSpeed, 0);
 
             deltaRotation = Quaternion.Euler(rotationDirection * Time.deltaTime);
             rb.MoveRotation(rb.rotation * deltaRotation);
         }
+    }
 
-        //key for forward
-        if (Input.GetKey(KeyCode.W))
+    private void DrivingForward()
+    {
+        rb.AddForce(new Vector3(transform.forward.x, 0, transform.forward.z) * speed);
+
+        //limits the speed of the kart
+        if (isBoosted == false && rb.velocity.magnitude >= maxSpeed)
         {
-            //frontWheels[0].transform.Rotate(+wheelRotationSpeed, 0, 0);
-            //backWheels.transform.Rotate(+wheelRotationSpeed, 0, 0);
-
-            rb.AddForce(new Vector3(transform.forward.x, 0, transform.forward.z) * speed);
-
-            //limits the speed of the kart
-            if (isBoosted == false && rb.velocity.magnitude >= maxSpeed)
-            {
-                rb.velocity *= 0.95f;
-            }
-            else if (isBoosted == true && rb.velocity.magnitude >= boostSpeed)
-            {
-                rb.velocity *= 0.95f;
-            }
+            rb.velocity *= 0.95f;
         }
-        else if (Input.GetKey(KeyCode.S))
+        else if (isBoosted == true && rb.velocity.magnitude >= boostSpeed)
         {
-            rb.AddForce(new Vector3(transform.forward.x, 0, transform.forward.z) * maxSpeedReverse);
-            //frontWheels[0].transform.Rotate(0, -wheelRotationSpeed / 3, 0);
-            //backWheels.transform.Rotate(0, -wheelRotationSpeed / 3, 0);
+            rb.velocity *= 0.95f;
         }
+    }
+
+    private void DrivingBackward()
+    {
+        rb.AddForce(new Vector3(transform.forward.x, 0, transform.forward.z) * maxSpeedReverse);
     }
 
     /// <summary>
@@ -295,7 +301,6 @@ public class Driving : MonoBehaviour
 
     private IEnumerator boost(float seconds)
     {
-        print(seconds);
         isBoosted = true;
         yield return new WaitForSeconds(seconds);
         isBoosted = false;
@@ -330,14 +335,6 @@ public class Driving : MonoBehaviour
         for (int i = 0; i < blueBoostFlames.Length; i++)
         {
             blueBoostFlames[i].GetComponent<SpriteRenderer>().enabled = false;
-        }
-    }
-
-    private void OnCollisionEnter(Collision collision)
-    {
-        if (collision.gameObject.tag == "ram")
-        {
-            //ram shit
         }
     }
 }
