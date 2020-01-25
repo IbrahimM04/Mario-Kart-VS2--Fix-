@@ -7,6 +7,10 @@ public class Driving : MonoBehaviour
 {
     private int driveState;
 
+    private bool existDrift;
+
+    private IEnumerator initialDrift;
+
     private float timer;
     #region Debugging variables
     private TextMeshProUGUI tmpro;
@@ -100,14 +104,17 @@ public class Driving : MonoBehaviour
         {
             driveState = 2;
         }
-        else if (Input.GetKey(KeyCode.LeftShift) && Input.GetKey(KeyCode.D))
+        else if (Input.GetKey(KeyCode.LeftShift) && Input.GetKey(KeyCode.D) && Input.GetKey(KeyCode.W))
         {
+            print("yeahy");
             driftDirection = 0;
+            initialDrift = driftingCoroutine(driftDirection);
             driveState = 3;
         }
-        else if(Input.GetKey(KeyCode.LeftShift) && Input.GetKey(KeyCode.S))
+        else if (Input.GetKey(KeyCode.LeftShift) && Input.GetKey(KeyCode.S) && Input.GetKey(KeyCode.W))
         {
             driftDirection = 1;
+            initialDrift = driftingCoroutine(driftDirection);
             driveState = 4;
         }
         else
@@ -128,14 +135,16 @@ public class Driving : MonoBehaviour
             case 3:
                 if (firstDrift)
                 {
-                    StartCoroutine(driftingCoroutine(driftDirection));
+                    firstDrift = false;
+                    StartCoroutine(initialDrift);
                 }
                 drifting(driftDirection);
                 break;
             case 4:
                 if (firstDrift)
                 {
-                    StartCoroutine(driftingCoroutine(driftDirection));
+                    firstDrift = false;
+                    StartCoroutine(initialDrift);
                 }
                 drifting(driftDirection);
                 break;
@@ -205,6 +214,7 @@ public class Driving : MonoBehaviour
     /// </summary>
     /// <param name="driftDir"></param>
     /// <returns></returns>
+
     private IEnumerator driftingCoroutine(int driftDir)
     {
         rb.AddForce(0, 6000, 0);
@@ -219,8 +229,6 @@ public class Driving : MonoBehaviour
         }
 
         yield return new WaitForSeconds(1f);
-
-        speedBoostLevel = 0;
 
         for (int i = 0; i < smoke.Length; i++)
         {
@@ -299,7 +307,7 @@ public class Driving : MonoBehaviour
         }
     }
 
-    private IEnumerator boost(float seconds)
+    private IEnumerator Boost(float seconds)
     {
         isBoosted = true;
         yield return new WaitForSeconds(seconds);
@@ -317,7 +325,9 @@ public class Driving : MonoBehaviour
             rb.MoveRotation(rb.rotation * deltaRotation);
             yield return new WaitForSeconds(0.0001f);
         }
-
+        //resetting variables
+        firstDrift = true;
+        speedBoostLevel = 0;
     }
 
     private void clearAllEffects()
